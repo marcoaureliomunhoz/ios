@@ -109,9 +109,10 @@ Para interceptar eventos (delegates) temos que implementar o protocolo **UIWebVi
 - webViewDidStartLoad(_ webView:UIWebView): método chamado antes da requisição.
 - webViewDidFinishLoad(_ webView:UIWebView): método chamado após requisição com sucesso.
 - webView(_ webView:UIWebView, didFailLoadWithError): método chamado após requsição com erro.
----  
 
 > Por padrão, a partir do iOS 9, requisições HTTP não são permitidas, pois não são seguras. Podemos configurar o projeto para que requisições HTTP sejam aceitas. Para isso temos que alterar o arquivo **Info.plist** e adicionar o item **App Transport Security Settings** e neste um subitem **Allow Arbitrary Loads** com valor **YES**.
+
+---
 
 **Fontes**  
 
