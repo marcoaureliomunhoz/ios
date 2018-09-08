@@ -17,7 +17,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(
             _ application:UIAplication,
-            didFinishLauchingWithOptions lauchOptions:[UIApplicationLauchOptionsKey:Any]?
+            didFinishLaunchingWithOptions launchOptions:[UIApplicationLaunchOptionsKey:Any]?
         ) -> Bool  
     {
         //primeiro criamos a window
@@ -52,7 +52,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(
             _ application:UIAplication,
-            didFinishLauchingWithOptions lauchOptions:[UIApplicationLauchOptionsKey:Any]?
+            didFinishLaunchingWithOptions launchOptions:[UIApplicationLaunchOptionsKey:Any]?
         ) -> Bool  
     {
         self.window = UIWindow(frame: UIScreen.main.bounds)
