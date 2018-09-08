@@ -117,3 +117,5 @@ Para interceptar eventos (delegates) temos que implementar o protocolo **UIWebVi
 
 - http://www.livroandroid.com.br/site/pages/livro-iphone.php 
 - https://github.com/livroios  
+- https://developer.apple.com  
+- https://swift.org  
