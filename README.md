@@ -83,7 +83,35 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 }
 ````  
 
+- **WebView**  
+
+Para carregar uma URL:
+```swift  
+@IBOutlet var webView: UIWebView!
+...
+let url = URL(string: "https://www.platelo.com.br")
+let request = URLRequest(url: url!)
+self.webView.loadRequest(request)
+```  
+
+Para carregar uma página local:
+```swift  
+@IBOutlet var webView: UIWebView!
+...
+let path = Bundle.main.path(forResource: "index", ofType: "html")
+let url = URL(fileURLWithPath: path!)
+let request = URLRequest(url: url!)
+self.webView.loadRequest(request)
+```
+
+Para interceptar eventos (delegates) temos que implementar o protocolo **UIWebViewDelegate** que nos fornece os seguintes métodos opcionais: 
+- webView(_ webView:UIWebView, request:URLRequest, navigationType:UIWebNavigationType) -> Bool: através deste método podemos interceptar a requisição, verificar a url da requisição e confirmar ou não a navegação.
+- webViewDidStartLoad(_ webView:UIWebView): método chamado antes da requisição.
+- webViewDidFinishLoad(_ webView:UIWebView): método chamado após requisição com sucesso.
+- webView(_ webView:UIWebView, didFailLoadWithError): método chamado após requsição com erro.
 ---  
+
+> Por padrão, a partir do iOS 9, requisições HTTP não são permitidas, pois não são seguras. Podemos configurar o projeto para que requisições HTTP sejam aceitas. Para isso temos que alterar o arquivo **Info.plist** e adicionar o item **App Transport Security Settings** e neste um subitem **Allow Arbitrary Loads** com valor **YES**.
 
 **Fontes**  
 
