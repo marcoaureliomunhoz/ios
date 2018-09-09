@@ -175,7 +175,7 @@ class ListaViewController: UIViewController, UITableDataSource, UITableViewDeleg
 No exemplo acima utilizamos a célula padrão da TableView, mas é possível customizar a célula de acordo com a nossa necessidade. Para isso temos que criar uma classe do tipo **UITableViewCell**, temos que criar um arquivo de visão (xib) para a célula onde então customizados sobre o componente **TableViewCell**. Depois de realizada a customização temos que informar para a table view que ela deve renderizar a célula customizada.
 
 ```swift  
-let xib = UINib(nibName: "NomeDaClasseDaMinhaTableViewCell", bundle: nil)
+let xib = UINib(nibName: "NomeDaMinhaClasseTableViewCell", bundle: nil)
 self.tableView.register(xib, forCellReuseIdentifier: "cell")
 ```  
 
