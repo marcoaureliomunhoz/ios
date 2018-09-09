@@ -83,7 +83,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 }
 ````  
 
-- **WebView**  
+**WebView**  
 
 Para carregar uma URL:
 ```swift  
