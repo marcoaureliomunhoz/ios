@@ -112,6 +112,73 @@ Para interceptar eventos (delegates) temos que implementar o protocolo **UIWebVi
 
 > Por padrão, a partir do iOS 9, requisições HTTP não são permitidas, pois não são seguras. Podemos configurar o projeto para que requisições HTTP sejam aceitas. Para isso temos que alterar o arquivo **Info.plist** e adicionar o item **App Transport Security Settings** e neste um subitem **Allow Arbitrary Loads** com valor **YES**.
 
+**TableView**  
+
+O componente TableView é usado para listar conteúdos em uma aplicação iOS. 
+
+- Para usar a TableView temos que implementar os protocolos **UITableViewDataSource** e **UITableViewDelegate** e no método *viewDidLoad()* da ViewContoller temos que informar para a TableView que o fornecedor de dados é a própria ViewController e que o delegate da table view também é própria ViewController. Temos também que informar qual será o formato das linhas/células.
+
+```swift  
+import UIKit
+class ListaViewController: UIViewController, UITableDataSource, UITableViewDelegate {
+
+    @IBOutlet var tableView: UITableView!
+
+    var lista: Array<TipoQualquer> = []
+
+    override func viewDidLoad() {
+        //aqui estamos informando para a table view que o fornecedor de dados é a própria view controller
+        self.tableView.dataSource = self
+
+        //aqui estamos informando para a table view que o delegate está na própria controller
+        self.tableView.delegate = self
+
+        //aqui estamos informando para a table view que o formato das células é o formato padrão UITableViewCell
+        self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")  
+
+        //aqui estamos acionando um serviço que tem como responsabilidade nos fornecer uma lista de TipoQualquer
+        self.lista = TipoQualquerService.getLista()
+    }
+
+    //aqui estamos implementando os métodos do protocolo UITableDataSource
+
+    //este método deve retornar a quantidade de registros que serão listados
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return self.lista.count
+    }
+
+    //este método deve retornar a célula com os dados
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = self.tableView.dequeueReusableCell(withIdentifier: "cell")
+        let linha = indexPath.row 
+        let item = self.lista[linha] 
+        cell.textLabel!.text = item.texto 
+        cell.imageView!.image = UIImage(named: item.url)
+        return cell
+    }
+
+    //aqui estamos implementando os métodos do protocolo UITableViewDelegate
+
+    //este método será chamado quando o usuário tocar sobre uma linha/célula
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let linha = indexPath.row 
+        let item = self.lista[linha] 
+
+        let alert = UIAlertController(title: "Alerta", message: "Clicou na linha \(linha)", preferredStyle: UIAlertControllerStyle.alert)
+        alert.addAction(UIAlertAction(title: "OK, style: UIAlertActionStyle.default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
+    }
+
+}
+```
+
+No exemplo acima utilizamos a célula padrão da TableView, mas é possível customizar a célula de acordo com a nossa necessidade. Para isso temos que criar uma classe do tipo **UITableViewCell**, temos que criar um arquivo de visão (xib) para a célula onde então customizados sobre o componente **TableViewCell**. Depois de realizada a customização temos que informar para a table view que ela deve renderizar a célula customizada.
+
+```swift  
+let xib = UINib(nibName: "NomeDaClasseDaMinhaTableViewCell", bundle: nil)
+self.tableView.register(xib, forCellReuseIdentifier: "cell")
+```  
+
 ---
 
 **Fontes**  
