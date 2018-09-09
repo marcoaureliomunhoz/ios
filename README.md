@@ -165,7 +165,7 @@ class ListaViewController: UIViewController, UITableDataSource, UITableViewDeleg
         let item = self.lista[linha] 
 
         let alert = UIAlertController(title: "Alerta", message: "Clicou na linha \(linha)", preferredStyle: UIAlertControllerStyle.alert)
-        alert.addAction(UIAlertAction(title: "OK, style: UIAlertActionStyle.default, handler: nil))
+        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
         self.present(alert, animated: true, completion: nil)
     }
 
