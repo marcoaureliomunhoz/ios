@@ -179,6 +179,158 @@ let xib = UINib(nibName: "NomeDaMinhaClasseTableViewCell", bundle: nil)
 self.tableView.register(xib, forCellReuseIdentifier: "cell")
 ```  
 
+**NavigationBar**  
+
+- Adicionando botões:
+
+```swift 
+import UIKit
+class MinhaViewController: UIViewController {
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        //botões
+        let btn1 = UIBarButtonItem(title: "BT1", style: UIBarButtonItemStyle.plain, target: self, action: #selector(MinhaViewControlle.btn1Action))
+        let btn2 = UIBarButtonItem(image: UIImage(named: "bt2"), style: UIBarButtonItemStyle.plain, target: self, action: #selector(MinhaViewControlle.btn1Action))
+        self.navigationItem.rightBarButtonItems = [btn1, btn2]
+    }
+
+    func btn1Action() {
+        ...
+    }
+
+    func btn2Action() {
+        ...
+    }
+}
+```   
+
+Referências:
+- https://developer.apple.com/documentation/uikit/uinavigationbar
+- https://developer.apple.com/documentation/uikit/uibarbuttonitem
+- https://developer.apple.com/documentation/uikit/uinavigationitem/1624956-rightbarbuttonitems
+- https://developer.apple.com/documentation/uikit/uinavigationitem/1624946-leftbarbuttonitems
+- http://swiftdeveloperblog.com/customize-uinavigationbar-appearance-in-swift
+- https://stackoverflow.com/questions/18929864/how-to-change-navigation-bar-color-in-ios-7
+- https://www.appcoda.com/customize-navigation-status-bar-ios-7
+
+**Threads**  
+
+É uma regra em diversas plataformas que as views só devem ser modificadas na thread principal e nunca numa thread secundária em background. A thread principal é responsável por tratar os eventos do usuário e por atualizar a interface. É recomendável que trabalhos pesados/demorados sejam executados em threads separadas e somente ao final que a thread principal deve ser acessada. 
+
+- Exemplo1 - usando **Grand Central Dispatch (GCD)**:
+
+```swift 
+let queue = DispatchQueue.global() //fila de threads secundárias 
+let main = DispatchQueue.main //thread principal 
+queue.async {
+    //aqui você faz o trabalho pesado, por exemplo, download, acesso a api...
+    //...
+    //ao final do processamento podemos então acessar a thread principal para atualizar a tela do usuário
+    main.async {
+        //aqui você atualiza as views necessárias
+        //...
+    }
+}
+```
+
+- Exemplo2 - usando **OperationQueue**: 
+
+```swift 
+let queue = OperationQueue() //fila de threads secundárias 
+let main = OperationQueue.main //thread principal 
+queue.addOperation({
+    //aqui você faz o trabalho pesado, por exemplo, download, acesso a api...
+    //...
+    //ao final do processamento podemos então acessar a thread principal para atualizar a tela do usuário
+    main.addOperation({
+        //aqui você atualiza as views necessárias
+        //...
+    })
+})
+```
+
+**Requisições HTTP com URLSession e URLRequest**  
+
+```swift 
+let http = URLSession.shared 
+let url = URL(string:"https://seudominio/api/get")
+let request = URLRequest(url: url!)
+let task = http.dataTask(with: request, completionHandler: {(data, response, error) -> Void in
+    if let error = error {
+        print("Erro ao realizar requisição HTTP: \(error)")
+        return
+    }
+    if let data = data {
+        //Aqui você realiza o parse os dados recebidos 
+        //...
+        //Se for necessário atualizar a tela do usuário
+        DispatchQueue.main.async {
+            //Aqui você atualiza a tela do usuário 
+            //...
+        }
+    }
+})
+task.resume()
+```
+
+Referências
+
+- https://developer.apple.com/documentation/foundation/urlsession
+- https://gist.github.com/cmoulton/7ddc3cfabda1facb040a533f637e74b8
+- 
+
+**JSON**  
+
+Para obter um array de objetos não mapeados a partir de json: 
+
+```swift 
+class func parserJson(_ data: Data) -> Array<TipoQualquer> {
+    var arrayTipo = Array<TipoQualquer> = []
+    do {
+        let arrayObj = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers) as! NSArray
+        for obj in arrayObj {
+            let dict = obj as! NSDictionary
+            let tipo = TipoQualquer()
+            tipo.prop1 = dict["prop1"] as! String
+            tipo.prop2 = dict["prop2"] as! String
+            ...
+            arrayTipo.append(tipo)
+        }
+    } catch let error as NSError {
+        print("Erro ao ler JSON \(error)")
+    }
+    return arrayTipo
+}
+```
+
+Para obter um array de objetos mapeados a partir de json: 
+```swift 
+class TipoQualquer: Codable {
+    var prop1: String
+    var prop2: String
+    var prop3: Int
+}
+class func parserJson(_ data: Data) -> Array<TipoQualquer> {
+    let decoder = JSONDecoder()
+    do {
+        return try decoder.decode([TipoQualquer].self, from: data)
+    } catch {
+        print("Erro ao ler JSON \(error)")
+    }
+    return nil
+}
+```
+
+
+Referências
+- https://developer.apple.com/documentation/foundation/jsonserialization
+- https://developer.apple.com/documentation/foundation/jsonencoder
+- https://developer.apple.com/documentation/foundation/jsondecoder 
+- https://benscheirman.com/2017/06/swift-json
+- https://grokswift.com/json-swift-4
+- https://github.com/Hearst-DD/ObjectMapper
+
 ---
 
 **Fontes**  
@@ -187,3 +339,6 @@ self.tableView.register(xib, forCellReuseIdentifier: "cell")
 - https://github.com/livroios  
 - https://developer.apple.com  
 - https://swift.org  
+- http://swiftdeveloperblog.com 
+- https://thatthinginswift.com
+- http://www.spotlessicode.com
